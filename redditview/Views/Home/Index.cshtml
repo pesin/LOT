@@ -1,0 +1,35 @@
+﻿@model redditview.Models.UserInfo
+@using Chart.Mvc.ComplexChart;
+@using Chart.Mvc.Extensions;
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@{
+    var lineChart = new LineChart()
+    {
+        ComplexData = new ComplexData()
+        {
+            Datasets = new List<ComplexDataset>
+                             {
+                                new ComplexDataset
+                                    {
+                                        Data = Model.Comments.Select(c=>(double)c.Score).ToList(),
+                                        Label = "score",
+                                        FillColor = "rgba(220,220,220,0.2)",
+                                        StrokeColor = "rgba(220,220,220,1)",
+                                        PointColor = "rgba(220,220,220,1)",
+                                        PointStrokeColor = "#fff",
+                                        PointHighlightFill = "#fff",
+                                        PointHighlightStroke = "rgba(220,220,220,1)",
+                                   }
+                  },
+            Labels = Model.Comments.Select(c => c.Date.ToString("yyyyMMdd_HHmm", System.Globalization.CultureInfo.InvariantCulture)).ToList()
+        }
+    };
+
+}
+<canvas id="myCanvas" width="1400" height="400"></canvas>
+@Html.CreateChart("myCanvas", lineChart)
